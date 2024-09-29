@@ -3,7 +3,7 @@
 int ejecutar_programa(t_lista *p)
 {
 
-    int opcion = 1;
+    int opcion = 1,pos;
     t_lista lista_canciones;
     t_lista playlist;
     crear_lista(&lista_canciones);
@@ -12,7 +12,7 @@ int ejecutar_programa(t_lista *p)
 
     while (opcion != -1)
     {
-
+        pos = 1;
         menu();
         printf("Ingrese opcion -> ");
         scanf("%d", &opcion);
@@ -20,22 +20,21 @@ int ejecutar_programa(t_lista *p)
         switch (opcion)
         {
         case 1:
-            map_lista(&lista_canciones, mostrar_cancion);
+            map_lista(&lista_canciones, mostrar_cancion_numerada,&pos);
             break;
         case 2:
             ordenar_lista_por_criterio(&lista_canciones);
             break;
         case 3:
             system("cls");
-            map_lista(&lista_canciones, mostrar_cancion);
-            crear_playlist(&playlist);
-
+            crear_playlist(&playlist,&lista_canciones);
             break;
         case -1:
             break;
         default:
             puts("Opcion invalida");
         }
+
         system("pause");
     }
     vaciar_lista(&lista_canciones);
@@ -66,11 +65,19 @@ int abre_archivo_canciones(t_lista *lista_canciones)
     return 1;
 }
 
+void mostrar_cancion_numerada(void *info,void *cont)
+{
+    unsigned *num = (unsigned *) cont;
+    t_cancion *c = (t_cancion *)info;
+    printf("%3d - %-30s%-50s%d:%02d\n",*num, c->autor, c->nombre, c->duracion.minutos, c->duracion.segundos);
+
+    (*num)++;
+}
+
 void mostrar_cancion(void *info)
 {
-
     t_cancion *c = (t_cancion *)info;
-    printf("%-30s%-50s%d:%d\n", c->autor, c->nombre, c->duracion.minutos, c->duracion.segundos);
+    printf("%-30s%-50s%d:%02d\n", c->autor, c->nombre, c->duracion.minutos, c->duracion.segundos);
 }
 
 int compara_canciones(void *a, void *b)
@@ -160,13 +167,53 @@ void ordenar_lista_por_criterio(t_lista *c)
     }
 }
 
-int crear_playlist(t_lista *p)
+int crear_playlist(t_lista *play,t_lista *lib)
 {
-    crear_listac(p);
+    t_cancion seleccionada;
+    int pos,cont,opcion = 1;
+    crear_listac(play);
 
-    puts("\nElige numero de cancion para agregar a la playlist ->");
+    while(opcion != -1)
+    {
+        pos = 1;
+        cont = 1;
+        map_lista(lib, mostrar_cancion_numerada,&cont);
+        do
+        {
+            puts("\nElige numero de cancion para agregar a la playlist ->");
+            scanf("%d",&pos);
+            printf("%d",pos);
+            if(pos < 0 || pos > cont) puts("\nOpcion Invalida.");
+        }
+        while(pos  < 0 || pos > cont);
 
-    system("pause");
+        recorre_n_nodos(lib,&seleccionada,sizeof(t_cancion),pos - 1);
+
+        do
+        {
+            puts("Seleccionaste: ");
+            mostrar_cancion(&seleccionada);
+            puts("\nElige una opcion ->\n1 - Guardar en playlist.\n2 - mostrar Playlist.\n3 - Cancelar.\n-1 - Salir.");
+            scanf("%d",&opcion);
+            system("clear");
+
+            switch(opcion)
+            {
+            case 1:
+                ponerSegundo(play,&seleccionada,sizeof(t_cancion));
+                break;
+            case 2:
+                pos = 1;
+                map_listac(play,mostrar_cancion_numerada,&pos);
+                break;
+            case 3:
+                break;
+            }
+        }
+        while(opcion != 3 && opcion != -1);
+
+    }
+
 
     return 1;
 }

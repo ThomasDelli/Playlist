@@ -156,12 +156,12 @@ int ver_ultimo_de_lista (const t_lista *lista, void*buffer, unsigned tam_buffer)
 ////////////////////////////////////////////////////////////////////////////////////////7
 
 
-void map_lista (t_lista *lista, void accion (void*))
+void map_lista (t_lista *lista, void accion (void*,void*), void* param)
 {
 
     while (*lista)
     {
-        accion ((*lista)->info);
+        accion ((*lista)->info, param);
         lista = &(*lista)->sig;
 
     }
@@ -313,22 +313,25 @@ void ordena_lista_dos (t_lista *p,int x,int cmp(void*,void*))
 
 }
 
-void filtrar_mejores (t_lista *p,int x,int cmp(void*,void*)){
+void filtrar_mejores (t_lista *p,int x,int cmp(void*,void*))
+{
     int i;
-      t_nodo * aux;
+    t_nodo * aux;
     ordena_lista(p,cmp);
 
-    for (i=0;i < x; i++){
+    for (i=0; i < x; i++)
+    {
 
         p = &(*p)->sig;
     }
 
-       while (*p){
-      aux= *p;
+    while (*p)
+    {
+        aux= *p;
         *p = aux->sig;
         free (aux->info);
         free(aux);
-       }
+    }
 
 
 }
@@ -338,4 +341,26 @@ int cmp_enteros (void*a,void*b)
     int *pa = (int*)a;
     int *pb = (int*)b;
     return *pb-*pa;
+}
+
+int recorre_n_nodos(t_lista *p,void *d,unsigned tam_buffer,unsigned n)
+{
+    int i;
+    if(*p == NULL) return 0;
+
+    i = 0;
+    while(*p && i < n )
+    {
+        p = &(*p)->sig;
+        i++;
+    }
+
+    if( i == n)
+    {
+        memcpy(d,(*p)->info,minimo(tam_buffer,(*p)->tam_info));
+
+        return 1;
+    }
+
+    return 0;
 }
