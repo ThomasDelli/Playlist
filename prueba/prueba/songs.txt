@@ -5,3 +5,9 @@ Soda Stereo;Persiana Americana;4;54
 Los Piojos;Como ali;3;46
 Ciro y los Persas;Vas a bailar;5;20
 Ciro y los Persas;Bicho de ciudad;4;12
+El Cuarteto de Nos;El Rey y el As;4;05
+El Cuarteto de Nos;Chivo Expiatorio;4;10
+El Cuarteto de Nos;Ya Te Vas a Mejorar;3;50
+El Cuarteto de Nos;El Hombre con Alas;4;00
+El Cuarteto de Nos;Como Pasa el Tiempo;3;45
+El Cuarteto de Nos;El Aprendiz;3;55
