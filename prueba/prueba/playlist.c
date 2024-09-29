@@ -2,6 +2,7 @@
 
 int ejecutar_programa(t_lista * p)
 {
+
     int opcion = 1;
     t_lista lista_canciones;
     t_lista  playlist;
@@ -26,17 +27,22 @@ int ejecutar_programa(t_lista * p)
             ordenar_lista_por_criterio (&lista_canciones);
             break;
         case 3:
+              system("cls");
+             map_lista(&lista_canciones,mostrar_cancion);
             crear_playlist(&playlist);
+
             break;
         case -1:
             break;
         default:
             puts("Opcion invalida");
         }
-
+         system("pause");
     }
     vaciar_lista(&lista_canciones);
+    if(!lista_vacia(&playlist)){
     vaciar_listac(&playlist);
+    }
     return 1;
 }
 
@@ -154,12 +160,16 @@ void ordenar_lista_por_criterio (t_lista *c)
         puts("Opcion invalida");
     }
 
+
 }
 
-t_lista * crear_playlist(t_lista * p){
+int crear_playlist(t_lista * p){
 crear_listac(p);
 
+puts("\nElige numero de cancion para agregar a la playlist ->");
 
-puts("hola");
-return p;
+
+system("pause");
+
+return 1;
 }

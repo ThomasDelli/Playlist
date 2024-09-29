@@ -25,5 +25,5 @@ int compara_nombre_canciones(void*,void*);
 int compara_autor_canciones(void*,void*);
 int compara_duracion_canciones(void*,void*);
 void ordenar_lista_por_criterio (t_lista* c);
-t_lista * crear_playlist(t_lista * p);
+int crear_playlist(t_lista * p);
 #endif // PLAYLIST_H_INCLUDED
