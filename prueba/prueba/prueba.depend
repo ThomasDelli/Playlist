@@ -1,0 +1,43 @@
+# depslib dependency file v1.0
+1727397982 source:c:\users\admin\desktop\prueba\lista_circular.c
+	"lista_circular.h"
+
+1727397873 c:\users\admin\desktop\prueba\lista_circular.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1727402302 source:c:\users\admin\desktop\prueba\main.c
+	"lista_circular.h"
+	"playlist.h"
+
+1727402350 c:\users\admin\desktop\prueba\playlist.h
+	"lista_circular.h"
+
+1727403583 source:c:\users\admin\desktop\prueba\playlist.c
+	"playlist.h"
+
+1727563887 source:c:\users\thomas\downloads\prueba\prueba\lista.c
+	"lista.h"
+
+1727563874 c:\users\thomas\downloads\prueba\prueba\lista.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1727563057 source:c:\users\thomas\downloads\prueba\prueba\lista_circular.c
+	"lista_circular.h"
+
+1727563031 c:\users\thomas\downloads\prueba\prueba\lista_circular.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"lista.h"
+
+1727571280 source:c:\users\thomas\downloads\prueba\prueba\main.c
+	"playlist.h"
+
+1727571144 c:\users\thomas\downloads\prueba\prueba\playlist.h
+	"lista.h"
+	"lista_circular.h"
+
