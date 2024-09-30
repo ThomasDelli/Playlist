@@ -9,7 +9,8 @@
 #define SIN_MEMORIA 0
 #define minimo(a,b) ((a) <= (b) ? (a) : (b))
 
-typedef struct sNodo{
+typedef struct sNodo
+{
     void* info;
     unsigned tam_info;
     struct sNodo *sig;

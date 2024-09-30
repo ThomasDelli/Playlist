@@ -1,33 +1,31 @@
 #include "playlist.h"
 
-int ejecutar_programa(t_lista *p)
+int ejecutar_programa(t_lista *lista_canciones,char *usuario)
 {
-
-    int opcion = 1,pos;
-    t_lista lista_canciones;
     t_lista playlist;
-    crear_lista(&lista_canciones);
-    abre_archivo_canciones(&lista_canciones);
-    ordena_lista(&lista_canciones, compara_canciones);
+    int opcion = 1,pos, nroLista = 0;
+
+    abre_archivo_canciones(lista_canciones);
+    ordena_lista(lista_canciones, compara_canciones);
 
     while (opcion != -1)
     {
         pos = 1;
-        menu();
+        menu(usuario);
         printf("Ingrese opcion -> ");
         scanf("%d", &opcion);
         puts("");
         switch (opcion)
         {
         case 1:
-            map_lista(&lista_canciones, mostrar_cancion_numerada,&pos);
+            map_lista(lista_canciones, mostrar_cancion_numerada,&pos);
             break;
         case 2:
-            ordenar_lista_por_criterio(&lista_canciones);
+            ordenar_lista_por_criterio(lista_canciones);
             break;
         case 3:
             system("cls");
-            crear_playlist(&playlist,&lista_canciones);
+            crear_playlist(&playlist,lista_canciones,++nroLista,usuario);
             break;
         case -1:
             break;
@@ -35,13 +33,10 @@ int ejecutar_programa(t_lista *p)
             puts("Opcion invalida");
         }
 
-        system("pause");
+
     }
-    vaciar_lista(&lista_canciones);
-    if (!lista_vacia(&playlist))
-    {
-        vaciar_listac(&playlist);
-    }
+
+
     return 1;
 }
 
@@ -99,7 +94,7 @@ int compara_canciones(void *a, void *b)
         return resultado; // Si los nombres son diferentes, devuelve el resultado
     }
 
-    // 3. Si los nombres tambi�n son iguales, comparar por duraci�n
+    // 3. Si los nombres tambien son iguales, comparar por duracion
     if (cancion1->duracion.minutos != cancion2->duracion.minutos)
     {
         return cancion1->duracion.minutos - cancion2->duracion.minutos; // Comparar minutos
@@ -136,14 +131,15 @@ int compara_duracion_canciones(void *a, void *b)
     return cancion1->duracion.segundos - cancion2->duracion.segundos;
 }
 
-void menu()
+void menu(char *usuario)
 {
-    puts("\n------------------------------SPOTIUNLAM--------------------");
+    printf("\n------------------------------SPOTIUNLAM-----------------Usuario logeado:%s\n\n",usuario);
 
     puts("1) Ver lista de canciones.");
     puts("2) Cambiar orden de canciones.");
     puts("3) Crear playlist");
     puts("-1) Salir.");
+    puts("------------------------------------------------------------------------------------");
 }
 
 void ordenar_lista_por_criterio(t_lista *c)
@@ -167,7 +163,7 @@ void ordenar_lista_por_criterio(t_lista *c)
     }
 }
 
-int crear_playlist(t_lista *play,t_lista *lib)
+int crear_playlist(t_lista *play,t_lista *lib,int nroLista,char* usuario)
 {
     t_cancion seleccionada;
     int pos,cont,opcion = 1;
@@ -181,39 +177,147 @@ int crear_playlist(t_lista *play,t_lista *lib)
         do
         {
             puts("\nElige numero de cancion para agregar a la playlist ->");
+
             scanf("%d",&pos);
-            printf("%d",pos);
             if(pos < 0 || pos > cont) puts("\nOpcion Invalida.");
         }
         while(pos  < 0 || pos > cont);
 
         recorre_n_nodos(lib,&seleccionada,sizeof(t_cancion),pos - 1);
+        puts("\nSeleccionaste: ");
+        mostrar_cancion(&seleccionada);
+
 
         do
         {
-            puts("Seleccionaste: ");
-            mostrar_cancion(&seleccionada);
-            puts("\nElige una opcion ->\n1 - Guardar en playlist.\n2 - mostrar Playlist.\n3 - Cancelar.\n-1 - Salir.");
+            puts("\n\n1) Guardar en playlist.\n2) Mostrar Playlist.\n3) Vaciar playlist.\n4) Agregar nueva cancion.\n-1) Salir.\n\nElige una opcion ->");
             scanf("%d",&opcion);
-            system("clear");
+            system("cls");
+
 
             switch(opcion)
             {
             case 1:
                 ponerSegundo(play,&seleccionada,sizeof(t_cancion));
+                puts("Se agrego la cancion a la playlist");
                 break;
             case 2:
                 pos = 1;
-                map_listac(play,mostrar_cancion_numerada,&pos);
+                if(!listac_vacia(play))
+                {
+                    printf("Playlist creada por %s\n",usuario);
+                    map_listac(play,mostrar_cancion_numerada,&pos);
+                }
+                else
+                    puts("La playlist esta vacia");
                 break;
             case 3:
+                vaciar_listac(play);
+                puts("Se vacio la playlist");
+                break;
+            case 4:
+
                 break;
             }
         }
-        while(opcion != 3 && opcion != -1);
+        while((opcion != -1) && (opcion != 4));
 
     }
 
+    if(!*play)
+    {
+        puts("NO SE CREO NINGUNA PLAYLIST\n");
+        return 0;
+    }
+    else
+    {
+        convertir_playlist_a_texto(play, nroLista);
+    }
+
+    if (!lista_vacia(play))
+    {
+        vaciar_listac(play);
+    }
+
+    return 1;
+}
+
+
+int convertir_playlist_a_texto(t_lista* play, int nroLista)
+{
+    char nombrePlaylist[20] = "PLAY";
+    t_tiempo duracionTotal = {00,00};
+    t_cancion cancion;
+
+    FILE* pf = fopen(crear_nombre_playlist(nombrePlaylist, nroLista), "wt");
+    if(!pf)
+        return 0;///error de archivo
+
+
+    fprintf(pf, "PLAYLIST %d\n\n",nroLista);
+    while(sacarPrimeroLista(play, &cancion, sizeof(t_cancion)))
+    {
+        fprintf(pf,"%-30s%-50s%d:%02d\n", cancion.autor, cancion.nombre, cancion.duracion.minutos, cancion.duracion.segundos);
+
+        duracionTotal.segundos += cancion.duracion.segundos;
+        if(duracionTotal.segundos >= 60)
+        {
+            duracionTotal.segundos -= 60;
+            duracionTotal.minutos++;
+            duracionTotal.minutos += cancion.duracion.minutos;
+        }
+        else
+        {
+            duracionTotal.minutos += cancion.duracion.minutos;
+        }
+    }
+    fprintf(pf, "\nDURACION TOTAL  %d : %02d",duracionTotal.minutos,duracionTotal.segundos);
+
+
+    fclose(pf);
+
+    return 1;
+}
+
+char* crear_nombre_playlist(char* nomPlaylist, int nroLista)
+{
+    char extension[5] = ".txt";
+    char num = nroLista + '0';
+    char* aux = strrchr(nomPlaylist,'\0');
+
+    *aux = num;
+    aux++;
+
+    strcat(aux, extension);
+
+    return nomPlaylist;
+}
+
+
+int ingresar_usuario (char *user, int longitud)
+{
+
+    printf("***************************************\n");
+    printf("*        BIENVENIDO A SPOTIUNLAM        *\n");
+    printf("***************************************\n\n");
+
+
+    printf("Por favor, ingrese su nombre de usuario:\n\n");
+
+
+    printf("+---------------------+\n");
+    printf("|                     |\r");
+    size_t len;
+    fgets(user, longitud, stdin);
+
+    // Eliminar el salto de línea '\n' agregado por fgets
+    len = strlen(user);
+    if (len > 0 && user[len - 1] == '\n')
+    {
+        user[len - 1] = '\0';
+    }
+
+    system("cls");
 
     return 1;
 }

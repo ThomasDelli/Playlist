@@ -170,3 +170,32 @@ int listac_vacia (t_lista *p)
 {
     return *p == NULL;
 }
+
+
+int sacarPrimeroLista(t_lista* l, void* dato, unsigned tam_buffer)
+{
+    t_lista* origial = l;
+    t_nodo* aux;
+    if(!*l)
+        return 0;
+
+    aux = *l;
+    memcpy(dato, aux->info, minimo(tam_buffer, aux->tam_info));
+
+
+    if(aux->sig == aux)
+        *l = NULL;
+    else
+    {
+        while((*l)->sig != aux)
+            l = &(*l)->sig;
+        (*l)->sig = aux->sig;
+        *origial = aux->sig;
+    }
+
+    free(aux->info);
+    free(aux);
+
+    return 1;
+}
+
