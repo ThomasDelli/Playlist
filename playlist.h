@@ -34,4 +34,5 @@ int convertir_playlist_a_texto(t_lista* play, int nroLista);
 char* crear_nombre_playlist(char* nomPlaylist, int nroLista);
 int eliminar_cancion(t_lista * play,int* cont);
 int elimina_n_nodo_playlist (t_lista *play,void*info,unsigned tam,int pos);
+int cambiar_orden_playlist(t_lista*);
 #endif // PLAYLIST_H_INCLUDED

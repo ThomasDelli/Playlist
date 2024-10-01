@@ -1,4 +1,5 @@
 #include "lista_circular.h"
+#include "playlist.h"
 
 void crear_listac (t_lista *p)
 {
@@ -204,3 +205,14 @@ int sacar_primero_listac(t_lista* l, void* dato, unsigned tam_buffer)
     return 1;
 }
 
+int solo_un_elemento_listac (t_lista* p){
+
+    return (*p)->sig == *p;
+}
+
+int intercambia_nodos(t_lista* l, int ant, int nue) {
+
+  //Es la muerte
+
+    return 1;
+}

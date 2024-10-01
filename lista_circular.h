@@ -19,5 +19,7 @@ int poner_listac_final (t_lista *,void*info,unsigned tam);
 int map_listac (t_lista *p, void accion (void*,void*),void *param);
 void mostrar_numeros(void*info);
 int sacar_primero_listac(t_lista* l, void* dato, unsigned tam_buffer);
+int solo_un_elemento_listac (t_lista* l);
+int intercambia_nodos(t_lista* l,int ant,int nue);
 
 #endif // LISTA_CIRCULAR_H_INCLUDED

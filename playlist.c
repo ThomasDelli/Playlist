@@ -192,11 +192,10 @@ int crear_playlist(t_lista *play,t_lista *lib,int nroLista,char* usuario)
         do
         {
             puts("\n\n1) Guardar en playlist.\n2) Mostrar Playlist.\n3) Vaciar playlist.");
-            puts("4) Agregar nueva cancion.\n5) Eliminar una cancion.\n-1) Salir.\n\nElige una opcion ->");
+            puts("4) Agregar nueva cancion.\n5) Eliminar una cancion.\n6) Cambiar orden cancion\n-1) Salir.\n\nElige una opcion ->");
             fflush(stdin);
             scanf("%d",&opcion);
             system("cls");
-
 
             switch(opcion)
             {
@@ -227,6 +226,13 @@ int crear_playlist(t_lista *play,t_lista *lib,int nroLista,char* usuario)
                     eliminar_cancion(play,&cant_canciones);
                 else
                     puts("La playlist esta vacia");
+                break;
+                case 6: if(!listac_vacia(play) && !solo_un_elemento_listac (play)){
+                   cambiar_orden_playlist(play);
+                }
+                    else
+                        puts("La playlist esta vacia o solo tiene una cancion agregada");
+
                 break;
             case -1:
                 break;
@@ -389,4 +395,31 @@ int elimina_n_nodo_playlist (t_lista *p,void*info,unsigned tam,int pos)
     sacar_primero_listac(p,&buffer,sizeof(t_cancion));
 
     return 1;
+}
+
+int cambiar_orden_playlist(t_lista* play){
+    t_cancion seleccionada;
+    int opcion,cant_canciones =1,nuevo_orden;
+    map_listac(play,mostrar_cancion_numerada,&cant_canciones);
+
+    do{
+         puts("Seleccione cual cancion desea cambiar el orden");
+         scanf("%d",&opcion);
+         if (opcion < 1 || opcion > cant_canciones-1) puts("Opcion invalida");
+    }while (opcion < 1 || opcion > cant_canciones-1);
+
+        recorre_n_nodos(play,&seleccionada,sizeof(t_cancion),opcion-1);
+        puts("\nCancion seleccionada: ");
+        mostrar_cancion(&seleccionada);
+        puts("\nIngrese nuevo orden ->");
+
+        do{
+            scanf("%d",&nuevo_orden);
+            if(nuevo_orden == opcion) puts("La cancion ya se encuentra en esa posicion");
+            else if (nuevo_orden < 1 || nuevo_orden > cant_canciones - 1) puts ("Opcion invalida");
+
+        } while((nuevo_orden < 1) || (nuevo_orden == opcion) || (nuevo_orden > cant_canciones-1));
+        intercambia_nodos(play,opcion,nuevo_orden);
+
+return 1;
 }
