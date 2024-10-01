@@ -114,20 +114,28 @@ int poner_listac_final (t_lista *p,void*info,unsigned tam)
 
     return 1;
 }
-int map_listac (t_lista *p, void accion (void*,void*),void *param)
-{
-    t_nodo *aux;
 
-    if(*p == NULL) return 0;
+int map_listac(t_lista *p, void accion(void*, void*), void *param) {
+    // Verificar si la lista está vacía
+    if (*p == NULL) return 0;
 
-    aux = *p;
+    t_nodo *aux = *p; // Guarda el puntero al primer nodo
 
-    accion((*p)->info,param);
+    // Caso de un solo nodo
+    if ((*p)->sig == *p) {
+        accion((*p)->info, param);
+        return 1;
+    }
+
+    // Aplicar la acción al primer nodo
+    accion((*p)->info, param);
+
+    // Mover al siguiente nodo
     p = &(*p)->sig;
 
-    while ((*p) != aux)
-    {
-        accion((*p)->info,param);
+    // Recorremos el resto de la lista circular
+    while (*p != aux) {
+        accion((*p)->info, param);
         p = &(*p)->sig;
     }
 
@@ -172,7 +180,7 @@ int listac_vacia (t_lista *p)
 }
 
 
-int sacarPrimeroLista(t_lista* l, void* dato, unsigned tam_buffer)
+int sacar_primero_listac(t_lista* l, void* dato, unsigned tam_buffer)
 {
     t_lista* origial = l;
     t_nodo* aux;

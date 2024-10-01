@@ -32,5 +32,6 @@ int crear_playlist(t_lista *play,t_lista *lib, int nroLista,char *usuario);
 int ingresar_usuario (char *user, int longitud);
 int convertir_playlist_a_texto(t_lista* play, int nroLista);
 char* crear_nombre_playlist(char* nomPlaylist, int nroLista);
-
+int eliminar_cancion(t_lista * play,int* cont);
+int elimina_n_nodo_playlist (t_lista *play,void*info,unsigned tam,int pos);
 #endif // PLAYLIST_H_INCLUDED

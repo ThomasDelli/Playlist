@@ -67,6 +67,7 @@ void mostrar_cancion_numerada(void *info,void *cont)
     printf("%3d - %-30s%-50s%d:%02d\n",*num, c->autor, c->nombre, c->duracion.minutos, c->duracion.segundos);
 
     (*num)++;
+
 }
 
 void mostrar_cancion(void *info)
@@ -166,7 +167,7 @@ void ordenar_lista_por_criterio(t_lista *c)
 int crear_playlist(t_lista *play,t_lista *lib,int nroLista,char* usuario)
 {
     t_cancion seleccionada;
-    int pos,cont,opcion = 1;
+    int pos,cont,opcion = 1,cant_canciones=0;
     crear_listac(play);
 
     while(opcion != -1)
@@ -177,11 +178,11 @@ int crear_playlist(t_lista *play,t_lista *lib,int nroLista,char* usuario)
         do
         {
             puts("\nElige numero de cancion para agregar a la playlist ->");
-
+              fflush(stdin);
             scanf("%d",&pos);
-            if(pos < 0 || pos > cont) puts("\nOpcion Invalida.");
+            if(pos < 1 || pos > cont-1) puts("\nOpcion Invalida.");
         }
-        while(pos  < 0 || pos > cont);
+        while(pos  < 1 || pos > cont-1);
 
         recorre_n_nodos(lib,&seleccionada,sizeof(t_cancion),pos - 1);
         puts("\nSeleccionaste: ");
@@ -190,7 +191,9 @@ int crear_playlist(t_lista *play,t_lista *lib,int nroLista,char* usuario)
 
         do
         {
-            puts("\n\n1) Guardar en playlist.\n2) Mostrar Playlist.\n3) Vaciar playlist.\n4) Agregar nueva cancion.\n-1) Salir.\n\nElige una opcion ->");
+            puts("\n\n1) Guardar en playlist.\n2) Mostrar Playlist.\n3) Vaciar playlist.");
+            puts("4) Agregar nueva cancion.\n5) Eliminar una cancion\n-1) Salir.\n\nElige una opcion ->");
+             fflush(stdin);
             scanf("%d",&opcion);
             system("cls");
 
@@ -200,9 +203,10 @@ int crear_playlist(t_lista *play,t_lista *lib,int nroLista,char* usuario)
             case 1:
                 ponerSegundo(play,&seleccionada,sizeof(t_cancion));
                 puts("Se agrego la cancion a la playlist");
+                cant_canciones++;
                 break;
             case 2:
-                pos = 1;
+                pos =1;
                 if(!listac_vacia(play))
                 {
                     printf("Playlist creada por %s\n",usuario);
@@ -218,6 +222,16 @@ int crear_playlist(t_lista *play,t_lista *lib,int nroLista,char* usuario)
             case 4:
 
                 break;
+            case 5:
+                if(!listac_vacia(play))
+                    eliminar_cancion(play,&cant_canciones);
+                else
+                    puts("La playlist esta vacia");
+                break;
+            case -1:
+                break;
+            default:
+                puts("Opcion invalida");
             }
         }
         while((opcion != -1) && (opcion != 4));
@@ -255,7 +269,7 @@ int convertir_playlist_a_texto(t_lista* play, int nroLista)
 
 
     fprintf(pf, "PLAYLIST %d\n\n",nroLista);
-    while(sacarPrimeroLista(play, &cancion, sizeof(t_cancion)))
+    while(sacar_primero_listac(play, &cancion, sizeof(t_cancion)))
     {
         fprintf(pf,"%-30s%-50s%d:%02d\n", cancion.autor, cancion.nombre, cancion.duracion.minutos, cancion.duracion.segundos);
 
@@ -271,7 +285,7 @@ int convertir_playlist_a_texto(t_lista* play, int nroLista)
             duracionTotal.minutos += cancion.duracion.minutos;
         }
     }
-    fprintf(pf, "\nDURACION TOTAL  %d : %02d",duracionTotal.minutos,duracionTotal.segundos);
+    fprintf(pf, "\nDURACION TOTAL  %d:%02d",duracionTotal.minutos,duracionTotal.segundos);
 
 
     fclose(pf);
@@ -320,4 +334,57 @@ int ingresar_usuario (char *user, int longitud)
     system("cls");
 
     return 1;
+}
+
+int eliminar_cancion(t_lista * play,int *cantidad)
+{
+    int pos, cant_canciones = 1;
+    char op;
+    t_cancion seleccionada;
+
+    map_listac(play,mostrar_cancion_numerada,&cant_canciones);
+    puts("\nElige cual opcion desea eliminar");
+    do
+    {
+        scanf("%d",&pos);
+        if(pos < 1 || pos > (*cantidad)) puts("Opcion invalida");
+    }
+    while(pos < 1 || pos > (*cantidad));
+
+    recorre_n_nodos(play,&seleccionada,sizeof(t_cancion),pos-1);
+    puts("\nSeleccionaste:");
+    mostrar_cancion(&seleccionada);
+    printf("\nDesea eliminar la cancion(Y/N)?: ");
+
+    do
+    {
+        fflush(stdin);
+        scanf("%c",&op);
+        if(!OPCION_VALIDA(op)) puts("Opcion invalida");
+    }
+    while(!OPCION_VALIDA(op));
+
+    if (op == 'Y' || op == 'y'){
+    elimina_n_nodo_playlist (play,&seleccionada,sizeof(t_cancion),pos);
+    puts("Cancion eliminada con exito");
+    (*cantidad)--;
+    }
+
+    return 1;
+}
+
+int elimina_n_nodo_playlist (t_lista *p,void*info,unsigned tam,int pos){
+
+int i =0;
+t_cancion buffer;
+
+while (i < pos-1){
+
+    p=&(*p)->sig;
+    i++;
+}
+
+sacar_primero_listac(p,&buffer,sizeof(t_cancion));
+
+return 1;
 }
