@@ -178,7 +178,7 @@ int crear_playlist(t_lista *play,t_lista *lib,int nroLista,char* usuario)
         do
         {
             puts("\nElige numero de cancion para agregar a la playlist ->");
-              fflush(stdin);
+            fflush(stdin);
             scanf("%d",&pos);
             if(pos < 1 || pos > cont-1) puts("\nOpcion Invalida.");
         }
@@ -192,8 +192,8 @@ int crear_playlist(t_lista *play,t_lista *lib,int nroLista,char* usuario)
         do
         {
             puts("\n\n1) Guardar en playlist.\n2) Mostrar Playlist.\n3) Vaciar playlist.");
-            puts("4) Agregar nueva cancion.\n5) Eliminar una cancion\n-1) Salir.\n\nElige una opcion ->");
-             fflush(stdin);
+            puts("4) Agregar nueva cancion.\n5) Eliminar una cancion.\n-1) Salir.\n\nElige una opcion ->");
+            fflush(stdin);
             scanf("%d",&opcion);
             system("cls");
 
@@ -308,30 +308,29 @@ char* crear_nombre_playlist(char* nomPlaylist, int nroLista)
 }
 
 
-int ingresar_usuario (char *user, int longitud)
+int ingresar_usuario(char *user, int longitud)
 {
-
-    printf("***************************************\n");
-    printf("*        BIENVENIDO A SPOTIUNLAM        *\n");
-    printf("***************************************\n\n");
-
-
-    printf("Por favor, ingrese su nombre de usuario:\n\n");
+    printf("\t\t\t***************************************\n");
+    printf("\t\t\t*        BIENVENIDO A SPOTIUNLAM      *\n");
+    printf("\t\t\t***************************************\n\n");
 
 
-    printf("+---------------------+\n");
-    printf("|                     |\r");
-    size_t len;
-    fgets(user, longitud, stdin);
+        printf("Por favor, ingrese su nombre de usuario (max %d caracteres):\n\n", longitud);
 
-    // Eliminar el salto de línea '\n' agregado por fgets
-    len = strlen(user);
-    if (len > 0 && user[len - 1] == '\n')
-    {
-        user[len - 1] = '\0';
-    }
+        printf("+---------------------+\n");
+        printf("|                     |\r");
+        size_t len;
+        fgets(user, longitud, stdin);
 
-    system("cls");
+        // Eliminar el salto de línea '\n' agregado por fgets
+        len = strlen(user);
+        if (len > 0 && user[len - 1] == '\n')
+        {
+            user[len - 1] = '\0';
+        }
+
+        system("cls");
+
 
     return 1;
 }
@@ -364,27 +363,30 @@ int eliminar_cancion(t_lista * play,int *cantidad)
     }
     while(!OPCION_VALIDA(op));
 
-    if (op == 'Y' || op == 'y'){
-    elimina_n_nodo_playlist (play,&seleccionada,sizeof(t_cancion),pos);
-    puts("Cancion eliminada con exito");
-    (*cantidad)--;
+    if (op == 'Y' || op == 'y')
+    {
+        elimina_n_nodo_playlist (play,&seleccionada,sizeof(t_cancion),pos);
+        puts("Cancion eliminada con exito");
+        (*cantidad)--;
     }
 
     return 1;
 }
 
-int elimina_n_nodo_playlist (t_lista *p,void*info,unsigned tam,int pos){
+int elimina_n_nodo_playlist (t_lista *p,void*info,unsigned tam,int pos)
+{
 
-int i =0;
-t_cancion buffer;
+    int i =0;
+    t_cancion buffer;
 
-while (i < pos-1){
+    while (i < pos-1)
+    {
 
-    p=&(*p)->sig;
-    i++;
-}
+        p=&(*p)->sig;
+        i++;
+    }
 
-sacar_primero_listac(p,&buffer,sizeof(t_cancion));
+    sacar_primero_listac(p,&buffer,sizeof(t_cancion));
 
-return 1;
+    return 1;
 }

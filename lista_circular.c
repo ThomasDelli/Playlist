@@ -116,24 +116,21 @@ int poner_listac_final (t_lista *p,void*info,unsigned tam)
 }
 
 int map_listac(t_lista *p, void accion(void*, void*), void *param) {
-    // Verificar si la lista está vacía
+
     if (*p == NULL) return 0;
 
-    t_nodo *aux = *p; // Guarda el puntero al primer nodo
+    t_nodo *aux = *p;
 
-    // Caso de un solo nodo
     if ((*p)->sig == *p) {
         accion((*p)->info, param);
         return 1;
     }
 
-    // Aplicar la acción al primer nodo
-    accion((*p)->info, param);
 
-    // Mover al siguiente nodo
+    accion((*p)->info, param);
     p = &(*p)->sig;
 
-    // Recorremos el resto de la lista circular
+
     while (*p != aux) {
         accion((*p)->info, param);
         p = &(*p)->sig;
@@ -152,26 +149,26 @@ void vaciar_listac(t_lista *p)
 {
     if (!*p)
     {
-        return; // Si la lista está vacía, no hacemos nada
+        return; // Si la lista esta vacia, no hacemos nada
     }
 
     t_nodo *pri = *p;  // Guardamos el puntero al primer nodo
     t_nodo *sig = (*p)->sig;  // Iniciamos con el siguiente nodo del primero
 
-    // Si hay más de un nodo en la lista, entramos en el ciclo
+    // Si hay ma3s de un nodo en la lista, entramos en el ciclo
     while (sig != pri)
     {
         t_nodo *aux = sig->sig; // Guardamos el siguiente nodo
-        free(sig->info);        // Liberamos la información del nodo actual
+        free(sig->info);        // Liberamos la informacion del nodo actual
         free(sig);              // Liberamos el nodo actual
         sig = aux;             // Avanzamos al siguiente nodo
     }
 
-    // Liberamos el nodo que apuntaba a sí mismo (el primer nodo que queda por liberar)
+    // Liberamos el nodo que apuntaba a si mismo (el primer nodo que queda por liberar)
     free(pri->info);
     free(pri);
 
-    *p = NULL;  // Marcamos la lista como vacía
+    *p = NULL;  // Marcamos la lista como vacia
 }
 
 int listac_vacia (t_lista *p)
