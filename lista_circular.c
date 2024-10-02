@@ -116,13 +116,15 @@ int poner_listac_final (t_lista *p,void*info,unsigned tam)
     return 1;
 }
 
-int map_listac(t_lista *p, void accion(void*, void*), void *param) {
+int map_listac(t_lista *p, void accion(void*, void*), void *param)
+{
 
     if (*p == NULL) return 0;
 
     t_nodo *aux = *p;
 
-    if ((*p)->sig == *p) {
+    if ((*p)->sig == *p)
+    {
         accion((*p)->info, param);
         return 1;
     }
@@ -132,7 +134,8 @@ int map_listac(t_lista *p, void accion(void*, void*), void *param) {
     p = &(*p)->sig;
 
 
-    while (*p != aux) {
+    while (*p != aux)
+    {
         accion((*p)->info, param);
         p = &(*p)->sig;
     }
@@ -205,14 +208,74 @@ int sacar_primero_listac(t_lista* l, void* dato, unsigned tam_buffer)
     return 1;
 }
 
-int solo_un_elemento_listac (t_lista* p){
+int solo_un_elemento_listac (t_lista* p)
+{
 
     return (*p)->sig == *p;
 }
 
-int intercambia_nodos(t_lista* l, int ant, int nue) {
+int intercambia_nodos(t_lista* l, int ant, int nue)
+{
+    int i;
+    t_nodo *temp, *select, *aux, *ant_temp = NULL, *ant_select = NULL, *ultimo = *l;
 
-  //Es la muerte
+    if (ant == nue || *l == NULL) return 0;
+
+    while (ultimo->sig != *l)
+    {
+        ultimo = ultimo->sig;
+    }
+
+    select = temp = *l;
+
+    i = 0;
+    while (i < ant && select->sig != *l)
+    {
+        ant_select = select;
+        select = select->sig;
+        i++;
+    }
+
+    i = 0;
+    while (i < nue && temp->sig != *l)
+    {
+        ant_temp = temp;
+        temp = temp->sig;
+        i++;
+    }
+
+    if (ant_select == NULL)
+    {
+        if(ant == 0){
+            ant_select = ultimo;
+            ant_select->sig = temp;
+        }
+
+        *l = temp;
+    }
+    else
+    {
+        ant_select->sig = temp;
+    }
+
+    if (ant_temp == NULL)
+    {
+        if(nue == 0){
+            ant_temp = ultimo;
+            ant_temp->sig = select;
+        }
+
+        *l = select;
+    }
+    else
+    {
+        ant_temp->sig = select;
+    }
+
+
+    aux = select->sig;
+    select->sig = temp->sig;
+    temp->sig = aux;
 
     return 1;
 }

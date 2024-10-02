@@ -191,8 +191,7 @@ int crear_playlist(t_lista *play,t_lista *lib,int nroLista,char* usuario)
 
         do
         {
-            puts("\n\n1) Guardar en playlist.\n2) Mostrar Playlist.\n3) Vaciar playlist.");
-            puts("4) Agregar nueva cancion.\n5) Eliminar una cancion.\n6) Cambiar orden cancion\n-1) Salir.\n\nElige una opcion ->");
+            puts("\n\n1) Guardar en playlist.\n2) Mostrar Playlist.\n3) Vaciar playlist.\n4) Agregar nueva cancion.\n5) Eliminar una cancion.\n6) Cambiar orden cancion\n-1) Salir.\n\nElige una opcion ->");
             fflush(stdin);
             scanf("%d",&opcion);
             system("cls");
@@ -205,7 +204,7 @@ int crear_playlist(t_lista *play,t_lista *lib,int nroLista,char* usuario)
                 cant_canciones++;
                 break;
             case 2:
-                pos =1;
+                pos = 1;
                 if(!listac_vacia(play))
                 {
                     printf("Playlist creada por %s\n",usuario);
@@ -227,11 +226,13 @@ int crear_playlist(t_lista *play,t_lista *lib,int nroLista,char* usuario)
                 else
                     puts("La playlist esta vacia");
                 break;
-                case 6: if(!listac_vacia(play) && !solo_un_elemento_listac (play)){
-                   cambiar_orden_playlist(play);
+            case 6:
+                if(!listac_vacia(play) && !solo_un_elemento_listac (play))
+                {
+                    cambiar_orden_playlist(play);
                 }
-                    else
-                        puts("La playlist esta vacia o solo tiene una cancion agregada");
+                else
+                    puts("La playlist esta vacia o solo tiene una cancion agregada");
 
                 break;
             case -1:
@@ -321,21 +322,21 @@ int ingresar_usuario(char *user, int longitud)
     printf("\t\t\t***************************************\n\n");
 
 
-        printf("Por favor, ingrese su nombre de usuario (max %d caracteres):\n\n", longitud);
+    printf("Por favor, ingrese su nombre de usuario (max %d caracteres):\n\n", longitud);
 
-        printf("+---------------------+\n");
-        printf("|                     |\r");
-        size_t len;
-        fgets(user, longitud, stdin);
+    printf("+---------------------+\n");
+    printf("|                     |\r");
+    size_t len;
+    fgets(user, longitud, stdin);
 
-        // Eliminar el salto de línea '\n' agregado por fgets
-        len = strlen(user);
-        if (len > 0 && user[len - 1] == '\n')
-        {
-            user[len - 1] = '\0';
-        }
+    // Eliminar el salto de línea '\n' agregado por fgets
+    len = strlen(user);
+    if (len > 0 && user[len - 1] == '\n')
+    {
+        user[len - 1] = '\0';
+    }
 
-        system("cls");
+    system("cls");
 
 
     return 1;
@@ -397,29 +398,34 @@ int elimina_n_nodo_playlist (t_lista *p,void*info,unsigned tam,int pos)
     return 1;
 }
 
-int cambiar_orden_playlist(t_lista* play){
+int cambiar_orden_playlist(t_lista* play)
+{
     t_cancion seleccionada;
     int opcion,cant_canciones =1,nuevo_orden;
     map_listac(play,mostrar_cancion_numerada,&cant_canciones);
 
-    do{
-         puts("Seleccione cual cancion desea cambiar el orden");
-         scanf("%d",&opcion);
-         if (opcion < 1 || opcion > cant_canciones-1) puts("Opcion invalida");
-    }while (opcion < 1 || opcion > cant_canciones-1);
+    do
+    {
+        puts("Seleccione cual cancion desea cambiar el orden");
+        scanf("%d",&opcion);
+        if (opcion < 1 || opcion > cant_canciones-1) puts("Opcion invalida");
+    }
+    while (opcion < 1 || opcion > cant_canciones-1);
 
-        recorre_n_nodos(play,&seleccionada,sizeof(t_cancion),opcion-1);
-        puts("\nCancion seleccionada: ");
-        mostrar_cancion(&seleccionada);
-        puts("\nIngrese nuevo orden ->");
+    recorre_n_nodos(play,&seleccionada,sizeof(t_cancion),opcion-1);
+    puts("\nCancion seleccionada: ");
+    mostrar_cancion(&seleccionada);
+    puts("\nIngrese nuevo orden ->");
 
-        do{
-            scanf("%d",&nuevo_orden);
-            if(nuevo_orden == opcion) puts("La cancion ya se encuentra en esa posicion");
-            else if (nuevo_orden < 1 || nuevo_orden > cant_canciones - 1) puts ("Opcion invalida");
+    do
+    {
+        scanf("%d",&nuevo_orden);
+        if(nuevo_orden == opcion) puts("La cancion ya se encuentra en esa posicion");
+        else if (nuevo_orden < 1 || nuevo_orden > cant_canciones - 1) puts ("Opcion invalida");
 
-        } while((nuevo_orden < 1) || (nuevo_orden == opcion) || (nuevo_orden > cant_canciones-1));
-        intercambia_nodos(play,opcion,nuevo_orden);
+    }
+    while((nuevo_orden < 1) || (nuevo_orden == opcion) || (nuevo_orden > cant_canciones-1));
+    intercambia_nodos(play,opcion-1,nuevo_orden-1);
 
-return 1;
+    return 1;
 }
