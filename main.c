@@ -22,5 +22,10 @@ int main()
   ingresar_usuario(usuario,MAX_USER);
   ejecutar_programa(&playlist,usuario);
 
-    return 0;
+  if (!lista_vacia(&playlist))
+  {
+    vaciar_lista(&playlist);
+  }
+    
+  return 0;
 }
