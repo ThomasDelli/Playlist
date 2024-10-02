@@ -1,8 +1,11 @@
 PLAYLIST 1
 
-Los Piojos                    Como ali                                          3:46
 Spinetta                      Seguir Viviendo Sin Tu Amor                       2:40
+Los Piojos                    Como ali                                          3:46
 Soda Stereo                   Persiana Americana                                4:54
+Soda Stereo                   De Musica Ligera                                  3:33
+Skay Beilinson                Oda a la sin Nombre                               4:40
+El Cuarteto de Nos            El Rey y el As                                    4:05
 El Cuarteto de Nos            El Aprendiz                                       3:55
 
-DURACION TOTAL  15:15
+DURACION TOTAL  27:33

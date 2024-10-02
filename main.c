@@ -3,15 +3,29 @@
 int main()
 {
     char usuario[MAX_USER];
-    t_lista playlist;
-    //int vec[5] = {1,5,4,3,2},i;
-    crear_lista(&playlist);
-    //crear_listac(&playlist);
+    t_lista library;
+    crear_lista(&library);
 
-    /*for(i =0;i < 5;i++){
-        ponerSegundo(&playlist,vec + i,sizeof(int));
+    ///int vec[5] = {1,5,4,3,2},i;
+    ///crear_listac(&library);
+
+//    for(i =0;i < 5;i++){
+//        ponerSegundo(&library,vec + i,sizeof(int));
+//    }
+//    map_listac(&library,mostrar_entero,NULL);
+//    intercambia_nodos(&library,1,3);
+//    printf("\n");
+//    map_listac(&library,mostrar_entero,NULL);
+
+
+    ingresar_usuario(usuario,MAX_USER);
+    ejecutar_programa(&library,usuario);
+
+    if(!lista_vacia(&library)){
+        vaciar_lista(&library);
     }
 
+<<<<<<< HEAD
     map_listac(&playlist,mostrar_entero,NULL);
 
     intercambia_nodos(&playlist,1,0);
@@ -28,4 +42,7 @@ int main()
   }
     
   return 0;
+=======
+    return 0;
+>>>>>>> f1b2caa (refactor/intercanbiar_nodo mejorado.)
 }

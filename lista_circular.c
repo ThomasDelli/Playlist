@@ -217,62 +217,65 @@ int solo_un_elemento_listac (t_lista* p)
 int intercambia_nodos(t_lista* l, int ant, int nue)
 {
     int i;
-    t_nodo *temp, *select, *aux, *ant_temp = NULL, *ant_select = NULL, *ultimo = *l;
+    t_nodo *temp, *select, *aux, *ultimo, *ant_temp = NULL, *ant_select = NULL;
 
     if (ant == nue || *l == NULL) return 0;
 
-    while (ultimo->sig != *l)
-    {
-        ultimo = ultimo->sig;
-    }
+    select = temp = ultimo = aux = *l;
 
-    select = temp = *l;
-
-    i = 0;
-    while (i < ant && select->sig != *l)
+    if(ant > nue)
     {
-        ant_select = select;
-        select = select->sig;
-        i++;
+        i = ant;
+        ant = nue;
+        nue = i;
     }
 
     i = 0;
-    while (i < nue && temp->sig != *l)
+    while (aux->sig != *l)
     {
-        ant_temp = temp;
-        temp = temp->sig;
-        i++;
-    }
-
-    if (ant_select == NULL)
-    {
-        if(ant == 0){
-            ant_select = ultimo;
-            ant_select->sig = temp;
+        if(i < ant)
+        {
+            ant_select = aux;
+            select = aux->sig;
         }
 
+        if(i < nue)
+        {
+            ant_temp = aux;
+            temp = aux->sig;
+        }
+
+        aux = aux->sig;
+        i++;
+    }
+
+
+    if(ant == 0)
+    {
+        while (ultimo->sig != *l)
+        {
+            ultimo = ultimo->sig;
+        }
+
+        ant_select = ultimo;
         *l = temp;
     }
-    else
-    {
-        ant_select->sig = temp;
-    }
 
-    if (ant_temp == NULL)
+    ant_select->sig = temp;
+
+
+    if(nue == 0)
     {
-        if(nue == 0){
-            ant_temp = ultimo;
-            ant_temp->sig = select;
+        while (ultimo->sig != *l)
+        {
+            ultimo = ultimo->sig;
         }
-
+        ant_temp = ultimo;
         *l = select;
     }
-    else
-    {
-        ant_temp->sig = select;
-    }
+    ant_temp->sig = select;
 
-
+    /// intercambio final
     aux = select->sig;
     select->sig = temp->sig;
     temp->sig = aux;
